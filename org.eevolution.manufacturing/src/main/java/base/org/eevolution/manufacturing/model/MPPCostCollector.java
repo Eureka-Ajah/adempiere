@@ -484,9 +484,9 @@ public class MPPCostCollector extends X_PP_Cost_Collector implements DocAction ,
 				orderBomLine.saveEx();
 				log.fine("OrderLine -> Reserved="+orderBomLine.getQtyReserved()+", Delivered="+orderBomLine.getQtyDelivered());
 			} // Creathe meterial Method Change Variance
-			else if (isIssue() && isCostCollectorType(COSTCOLLECTORTYPE_MethodChangeVariance) && isVariance()) {
-				StandardCostCollector.createMethodVariances(this);
-			}
+                        else if (isIssue() && isCostCollectorType(COSTCOLLECTORTYPE_MethodChangeVariance) && isVariance()) {
+                                // Cost details will be generated during accounting
+                        }
 
 			if (isReceipt())
 			{
@@ -551,7 +551,7 @@ public class MPPCostCollector extends X_PP_Cost_Collector implements DocAction ,
 			}
 			else
 			{
-				StandardCostCollector.createActivityControl(this);
+                                // Cost details will be generated during accounting
 				if(activity.getQtyDelivered().compareTo(activity.getQtyRequired()) >= 0)
 				{
 					activity.closeIt();
@@ -569,7 +569,7 @@ public class MPPCostCollector extends X_PP_Cost_Collector implements DocAction ,
 			log.fine("OrderLine - Reserved=" + orderBOMLine.getQtyReserved() + ", Delivered=" + orderBOMLine.getQtyDelivered());
 			orderBOMLine.saveEx();
 			log.fine("OrderLine -> Reserved=" + orderBOMLine.getQtyReserved() + ", Delivered=" + orderBOMLine.getQtyDelivered());
-			StandardCostCollector.createUsageVariances(this);
+                        // Cost details will be generated during accounting
 		}
 		//
 		// Usage Variance (resource)
@@ -579,7 +579,7 @@ public class MPPCostCollector extends X_PP_Cost_Collector implements DocAction ,
 			activity.setDurationReal(activity.getDurationReal().add(getDurationReal()));
 			activity.setSetupTimeReal(activity.getSetupTimeReal().add(getSetupTimeReal()));
 			activity.saveEx();
-			StandardCostCollector.createActivityControl(this);
+                        // Cost details will be generated during accounting
 		}
 		else
 		{

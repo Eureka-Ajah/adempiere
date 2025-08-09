@@ -38,6 +38,7 @@ import org.compiere.model.Query;
 import org.compiere.util.Env;
 import org.compiere.util.Msg;
 import org.eevolution.manufacturing.model.MPPCostCollector;
+import org.eevolution.manufacturing.services.StandardCostCollector;
 import org.eevolution.model.RoutingService;
 import org.eevolution.model.RoutingServiceFactory;
 
@@ -120,13 +121,25 @@ public class Doc_PPCostCollector extends Doc
 	 */
 	public ArrayList<Fact> createFacts (MAcctSchema as)
 	{
-		setC_Currency_ID(as.getC_Currency_ID());
-		final ArrayList<Fact> facts = new ArrayList<Fact>();
-		
-		if(MPPCostCollector.COSTCOLLECTORTYPE_MaterialReceipt.equals(costCollector.getCostCollectorType()))
-			facts.add(createMaterialReceipt(as));
-		else if (MPPCostCollector.COSTCOLLECTORTYPE_ComponentIssue.equals(costCollector.getCostCollectorType()))
-			facts.add(createComponentIssue(as));
+                setC_Currency_ID(as.getC_Currency_ID());
+                final ArrayList<Fact> facts = new ArrayList<Fact>();
+
+                // Generate cost details when accounting
+                if (MPPCostCollector.COSTCOLLECTORTYPE_MethodChangeVariance.equals(costCollector.getCostCollectorType()) && costCollector.isVariance())
+                        StandardCostCollector.createMethodVariances(costCollector);
+                else if (MPPCostCollector.COSTCOLLECTORTYPE_ActivityControl.equals(costCollector.getCostCollectorType()))
+                        StandardCostCollector.createActivityControl(costCollector);
+                else if (MPPCostCollector.COSTCOLLECTORTYPE_UsegeVariance.equals(costCollector.getCostCollectorType()) && costCollector.getPP_Order_BOMLine_ID() > 0)
+                        StandardCostCollector.createUsageVariances(costCollector);
+                else if (MPPCostCollector.COSTCOLLECTORTYPE_UsegeVariance.equals(costCollector.getCostCollectorType()) && costCollector.getPP_Order_Node_ID() > 0)
+                        StandardCostCollector.createActivityControl(costCollector);
+                else if (MPPCostCollector.COSTCOLLECTORTYPE_RateVariance.equals(costCollector.getCostCollectorType()))
+                        StandardCostCollector.createRateVariances(costCollector);
+
+                if(MPPCostCollector.COSTCOLLECTORTYPE_MaterialReceipt.equals(costCollector.getCostCollectorType()))
+                        facts.add(createMaterialReceipt(as));
+                else if (MPPCostCollector.COSTCOLLECTORTYPE_ComponentIssue.equals(costCollector.getCostCollectorType()))
+                        facts.add(createComponentIssue(as));
 		else if (MPPCostCollector.COSTCOLLECTORTYPE_MethodChangeVariance.equals(costCollector.getCostCollectorType()))
 			facts.add(createVariance(as, ProductCost.ACCTTYPE_P_MethodChangeVariance));
 		else if (MPPCostCollector.COSTCOLLECTORTYPE_UsegeVariance.equals(costCollector.getCostCollectorType()))
