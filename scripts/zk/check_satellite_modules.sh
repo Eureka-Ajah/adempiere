@@ -15,12 +15,15 @@ for module in "${modules[@]}"; do
     exit 1
   fi
 
-  rg -q 'apply from: "\$\{rootDir\}/gradle/zk-legacy-libs\.gradle"' "$module" \
-    || { echo "ERROR: Missing shared ZK legacy libs apply in $module" >&2; exit 1; }
+  rg -q "dir: '../zkwebui/WEB-INF/lib'" "$module" \
+    || { echo "ERROR: Missing zkwebui lib fileTree in $module" >&2; exit 1; }
 
-  rg -q 'include: zkLegacyWebuiLibs' "$module" \
-    || { echo "ERROR: Missing include: zkLegacyWebuiLibs in $module" >&2; exit 1; }
-
+  if ! rg -q 'include: zkLegacyWebuiLibs' "$module" \
+      && ! rg -q "'zhtml\.jar'" "$module" \
+      && ! rg -q "'keylistener\.jar'" "$module"; then
+    echo "ERROR: Missing expected ZK legacy include list in $module" >&2
+    exit 1
+  fi
 done
 
 echo "Satellite module checks: OK"

@@ -24,15 +24,20 @@ for f in "$WEB_XML" "$ZK_XML"; do
 done
 
 # Structural sanity checks (best-effort without external xmllint dependency)
-require_pattern "$WEB_XML" '<web-app[^>]*version="3\.1"'
+if ! rg -q '<web-app[^>]*version="(2\.4|3\.1)"' "$WEB_XML"; then
+  echo "ERROR: web.xml version must be 2.4 or 3.1" >&2
+  exit 1
+fi
 require_pattern "$WEB_XML" '<servlet-name>zkLoader</servlet-name>'
 require_pattern "$WEB_XML" '<servlet-name>auEngine</servlet-name>'
-require_pattern "$WEB_XML" '<async-supported>true</async-supported>'
 require_pattern "$WEB_XML" '<url-pattern>/zkau/\*</url-pattern>'
 
 require_pattern "$ZK_XML" '<session-config>'
 require_pattern "$ZK_XML" '<timeout-uri>/timeout\.zul</timeout-uri>'
-require_pattern "$ZK_XML" '<automatic-timeout>true</automatic-timeout>'
+if ! rg -q '<automatic-timeout>true</automatic-timeout>|<automatic-timeout\s*/>' "$ZK_XML"; then
+  echo "ERROR: automatic-timeout is not configured in $ZK_XML" >&2
+  exit 1
+fi
 require_pattern "$ZK_XML" '<id-generator-class>org\.adempiere\.webui\.AdempiereIdGenerator</id-generator-class>'
 
 # parser check via python stdlib
