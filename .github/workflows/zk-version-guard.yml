@@ -26,6 +26,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install tooling dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ripgrep
+
       - name: Validate ZK core jar versions are aligned
         run: ./scripts/zk/check_zk_versions.sh
 
