@@ -4,11 +4,6 @@
 package org.adempiere.webui.component;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zkex.zul.Center;
-import org.zkoss.zkex.zul.East;
-import org.zkoss.zkex.zul.North;
-import org.zkoss.zkex.zul.South;
-import org.zkoss.zkex.zul.West;
 
 /**
  * @author teo_sarca

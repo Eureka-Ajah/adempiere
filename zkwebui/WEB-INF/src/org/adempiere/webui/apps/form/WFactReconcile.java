@@ -75,10 +75,10 @@ import org.compiere.util.Msg;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zkex.zul.Center;
-import org.zkoss.zkex.zul.North;
-import org.zkoss.zkex.zul.South;
-import org.zkoss.zkex.zul.West;
+import org.adempiere.webui.component.Center;
+import org.adempiere.webui.component.North;
+import org.adempiere.webui.component.South;
+import org.adempiere.webui.component.West;
 import org.zkoss.zul.Hbox;
 import org.zkoss.zul.Space;
 

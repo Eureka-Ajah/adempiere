@@ -4,6 +4,8 @@ plugins {
 	id 'signing'
 }
 
+apply from: "${rootDir}/gradle/zk-legacy-libs.gradle"
+
 
 repositories {
     mavenLocal()
@@ -19,10 +21,7 @@ allprojects {
 dependencies {
 	implementation fileTree(
 		dir: '../zkwebui/WEB-INF/lib',
-		include: [
-			'zhtml.jar',
-			'keylistener.jar',
-		]
+		include: zkLegacyWebuiLibs
 	)
 
 	// Local

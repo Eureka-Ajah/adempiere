@@ -1,0 +1,56 @@
+name: ZK Version Guard
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+      - bugfix/**
+      - feature/**
+      - hotfix/**
+      - test/**
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
+      - bugfix/**
+      - feature/**
+      - hotfix/**
+      - test/**
+
+jobs:
+  zk-version-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate ZK core jar versions are aligned
+        run: ./scripts/zk/check_zk_versions.sh
+
+
+      - name: Validate ZK bootstrap web/zk config
+        run: ./scripts/zk/check_zk_bootstrap_config.sh
+
+
+      - name: Validate satellite module alignment
+        run: ./scripts/zk/check_satellite_modules.sh
+
+      - name: Regenerate ZK inventory report (drift check)
+        run: ./scripts/zk/generate_inventory.sh > /tmp/zk-inventory-current.md
+
+      - name: Verify inventory baseline is up to date
+        run: |
+          grep -v '^- Generated at:' docs/zk-inventory.md > /tmp/zk-inventory-baseline.notime.md
+          grep -v '^- Generated at:' /tmp/zk-inventory-current.md > /tmp/zk-inventory-current.notime.md
+          diff -u /tmp/zk-inventory-baseline.notime.md /tmp/zk-inventory-current.notime.md
+
+      - name: Regenerate ZUL/theme audit report
+        run: ./scripts/zk/check_zul_theme_refs.sh > /tmp/zk-theme-audit-current.md
+
+      - name: Verify ZUL/theme audit baseline is up to date
+        run: diff -u docs/zk-theme-audit.md /tmp/zk-theme-audit-current.md
+
+      - name: Run full ZK guard suite
+        run: ./scripts/zk/run_guard_suite.sh

@@ -48,8 +48,8 @@ import org.compiere.util.KeyNamePair;
 import org.compiere.util.Msg;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zkex.zul.Borderlayout;
-import org.zkoss.zkex.zul.Center;
+import org.adempiere.webui.component.Borderlayout;
+import org.adempiere.webui.component.Center;
 import org.zkoss.zul.Space;
 
 /**

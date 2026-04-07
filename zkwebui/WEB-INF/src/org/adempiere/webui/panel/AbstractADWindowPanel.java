@@ -84,8 +84,8 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zkex.zul.Borderlayout;
-import org.zkoss.zkex.zul.North;
+import org.adempiere.webui.component.Borderlayout;
+import org.adempiere.webui.component.North;
 import org.zkoss.zul.Menuitem;
 import org.zkoss.zul.Menupopup;
 

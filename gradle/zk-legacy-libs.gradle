@@ -1,0 +1,9 @@
+/**
+ * Shared legacy ZK webui libs used by satellite modules while migration is in progress.
+ */
+ext {
+	zkLegacyWebuiLibs = [
+		'zhtml.jar',
+		'keylistener.jar'
+	]
+}
